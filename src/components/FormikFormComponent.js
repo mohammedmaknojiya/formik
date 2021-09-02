@@ -1,13 +1,17 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage} from "formik";
 import * as Yup from "yup";
+import ErrorComponent from "./ErrorComponent";
 
 const initialValues = {
   name: "",
   email: "",
   channel: "",
   comments: "",
-  address: ""
+  address: "",
+  extra: "",
+  extra1: "",
+  social: {facebook:"",instagram:""}
 };
 const onSubmit = (v) => {
   console.log(v);
@@ -19,7 +23,9 @@ const validationSchema = Yup.object({
   email: Yup.string().email("Invalid Email Id").required("Required"),
   channel: Yup.string().required("Required"),
   comments: Yup.string().required("Required"),
-  address: Yup.string().required("Required")
+  address: Yup.string().required("Required"),
+  extra: Yup.string().required("Required"),
+  extra1: Yup.string().required("Required")
 });
 
 const FormikFormComponent = () => {
@@ -101,6 +107,29 @@ const FormikFormComponent = () => {
             }
           }
         </Field>
+        {/* {now here we see how we can pass custom error component with our styling} */}
+        <label>Extra Details</label>
+          <Field as="textarea"  name="extra" />
+          <ErrorMessage name="extra" component={ErrorComponent}/>
+          <br />
+          {/* {we can also use render props pattern to specify error 
+          here iniside our function we get error message as a props and then we can render some JSX} */}
+          <label>Extra Details More</label>
+          <Field as="textarea"  name="extra1" />
+          <ErrorMessage name="extra1" >
+            { //name of props can be anything
+              (erroMessageProps)=> {
+                return <div>{erroMessageProps}</div>
+              }
+            }
+          </ErrorMessage>
+          <br />
+
+
+          {/**now we see how we can use nested object  */}
+
+
+
           <button type="submit">submit</button>
         </Form>
       </Formik>
