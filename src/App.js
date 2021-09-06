@@ -3,6 +3,7 @@ import FormikForm from "./components/FormikForm";
 import FormikFormComponent from "./components/FormikFormComponent";
 import FormikFormFinal from "./components/FormikFormFinal";
 import FormikYupValidations from "./components/FormikYupValidation";
+import FormikContainer from "./components/ReusableCode/FormikContainer";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <FormikYupValidations/>
       <FormikFormComponent/>
       <FormikFormFinal/>
+      <FormikContainer/>
     </div>
   );
 }
