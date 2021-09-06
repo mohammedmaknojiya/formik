@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage, FieldArray} from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray, FastField} from "formik";
 import * as Yup from "yup";
 import ErrorComponent from "./ErrorComponent";
 
@@ -13,7 +13,8 @@ const initialValues = {
   extra1: "",
   social: {facebook:"",instagram:""},
   phoneNumbers : ['',''],
-  phNumbers : ['']
+  phNumbers : [''],
+  another_address:""
 
 };
 const onSubmit = (v) => {
@@ -34,7 +35,8 @@ const validationSchema = Yup.object({
     instagram: Yup.string().required("Required")
   }),
   phoneNumbers: Yup.array().of(Yup.string().required("Requuired")),
-  phNumbers: Yup.array().of(Yup.string().required("Required"))
+  phNumbers: Yup.array().of(Yup.string().required("Required")),
+  another_address: Yup.string().required("Required")
 });
 
 const FormikFormComponent = () => {
@@ -46,10 +48,17 @@ const FormikFormComponent = () => {
   return (
     <>
       <h1>Formik Form Components</h1>
+      {/**formik runs a validation on three cases 1) Onchange event means we are trying to fill value
+      2) onBlur event means we didn't fill any value 3) trying to submit directly without filling values
+      the first 2 cases may be performance overhead if form is too large. So we can avoid them by making
+      validationOnChange and validationOnBlur false. basically we are saying that dont do validation untill we 
+      click on submit button */}
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
+        validateOnChange={false}
+        validateOnBlur={false}
       >
        {/* {now we replace our form component with formik's Form Component. By using this we can avoid 
        using onSubmit={formik.handleSubmit} 
@@ -151,16 +160,17 @@ const FormikFormComponent = () => {
           <label>Phone Number Primary</label>
           <Field type="number" name="phoneNumbers[0]"/>
           <ErrorMessage name="phoneNumbers[0]"/>
+          <br/>
 
           <label>Secondry Number Primary</label>
           <Field type="number" name="phoneNumbers[1]"/>
           <ErrorMessage name="phoneNumbers[1]"/>
-
+          <br/>
           <label>List Of phone Numbers</label>
           <FieldArray name='phNumbers'>
             {
               fieldArrayProps => {
-                console.log(fieldArrayProps)
+                {/* console.log(fieldArrayProps) */}
                 const {push, remove, form} = fieldArrayProps;
                 const {values} = form;
                 const {phNumbers} = values
@@ -186,6 +196,15 @@ const FormikFormComponent = () => {
               }
             }
           </FieldArray>
+          <br/>
+          {/**this component is used for optimaization. if we use just a field component and if we type something
+          in any one of the field /basically here we are changing state of one of the field then all the fields 
+          get re render automatically. this will cause performance issue if we have very large form and very complex
+          calculation at any filed.
+          So to avoid re rendering of fields on changing of another fields we can use FastField component */}
+          <label>Another address </label>
+          <FastField type="text" name="another_address"/>
+          <ErrorMessage name="another_address"/>
 
           <button type="submit">submit</button>
         </Form>
