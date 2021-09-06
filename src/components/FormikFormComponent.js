@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage} from "formik";
+import { Formik, Form, Field, ErrorMessage, FieldArray} from "formik";
 import * as Yup from "yup";
 import ErrorComponent from "./ErrorComponent";
 
@@ -11,7 +11,10 @@ const initialValues = {
   address: "",
   extra: "",
   extra1: "",
-  social: {facebook:"",instagram:""}
+  social: {facebook:"",instagram:""},
+  phoneNumbers : ['',''],
+  phNumbers : ['']
+
 };
 const onSubmit = (v) => {
   console.log(v);
@@ -25,7 +28,12 @@ const validationSchema = Yup.object({
   comments: Yup.string().required("Required"),
   address: Yup.string().required("Required"),
   extra: Yup.string().required("Required"),
-  extra1: Yup.string().required("Required")
+  extra1: Yup.string().required("Required"),
+  social: Yup.object({
+    facebook: Yup.string().required("Required"),
+    instagram: Yup.string().required("Required")
+  }),
+  phoneNumbers: Yup.array().of(Yup.string().required("Requuired"))
 });
 
 const FormikFormComponent = () => {
@@ -127,8 +135,55 @@ const FormikFormComponent = () => {
 
 
           {/**now we see how we can use nested object  */}
+          
+          <label>Facebook profile</label>
+          <Field type='text' name='social.facebook' />
+          <ErrorMessage name="social.facebook"/>
+          <br/>
+            
+          <label>Instagram profile</label>
+          <Field type='text' name='social.instagram' />
+          <ErrorMessage name="social.instagram"/>
+          <br/>
 
+            
+          <label>Phone Number Primary</label>
+          <Field type="number" name="phoneNumbers[0]"/>
+          <ErrorMessage name="phoneNumbers[0]"/>
 
+          <label>Secondry Number Primary</label>
+          <Field type="number" name="phoneNumbers[1]"/>
+          <ErrorMessage name="phoneNumbers[1]"/>
+
+          <label>List Of phone Numbers</label>
+          <FieldArray name='phNumbers'>
+            {
+              fieldArrayProps => {
+                console.log(fieldArrayProps)
+                const {push, remove, form} = fieldArrayProps;
+                const {values} = form;
+                const {phNumbers} = values
+                return(
+                  <div>
+                   {
+                     phNumbers.map( (pnumber , index)=>(
+                       <div key={index}>
+                       {/**this ${} is used to evaluate and put the value inside string in JS */}
+                          <Field name={`phNumbers[${index}]`}/> {/**this become phNumbers[0] then 1 and so on */}
+                          {/**we have to restrict the user from removing all the fields. minimum 1 field must
+                          be present. hence we check if index is greate then zero then only we display the 
+                          remove button else we will remove that */}
+                          { index>0 && <button type="button" onClick={ ()=> remove(index)}> - </button>}
+                          <button type="button" onClick={ ()=> push('')}> + </button>
+                       </div>
+                     ) )
+                   }
+                  </div>
+                )
+
+              }
+            }
+          </FieldArray>
 
           <button type="submit">submit</button>
         </Form>
