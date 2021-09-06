@@ -33,7 +33,8 @@ const validationSchema = Yup.object({
     facebook: Yup.string().required("Required"),
     instagram: Yup.string().required("Required")
   }),
-  phoneNumbers: Yup.array().of(Yup.string().required("Requuired"))
+  phoneNumbers: Yup.array().of(Yup.string().required("Requuired")),
+  phNumbers: Yup.array().of(Yup.string().required("Required"))
 });
 
 const FormikFormComponent = () => {
@@ -175,6 +176,7 @@ const FormikFormComponent = () => {
                           remove button else we will remove that */}
                           { index>0 && <button type="button" onClick={ ()=> remove(index)}> - </button>}
                           <button type="button" onClick={ ()=> push('')}> + </button>
+                          <ErrorMessage name={`phNumbers[${index}]`}/>
                        </div>
                      ) )
                    }
