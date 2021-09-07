@@ -108,11 +108,12 @@ const FormikFormComponent = () => {
           {
             (props) =>{
               //console.log("Field props",props)
-              {/* {here in props we get access to 3 things 1)field 2)form 3)meta } 
+              /* {here in props we get access to 3 things 1)field 2)form 3)meta } 
               field gives us access to onBlur onChange name and value which we used to define at input element
               meta gives us access to touched and error values object which we used to render error condtionally
-              and form also gives us access to other usefull methods. Now we destructure it here to use it */}
-              const {field,form,meta} = props
+              and form also gives us access to other usefull methods. Now we destructure it here to use it */
+              //const {field,form,meta} = props
+              const {field,meta} = props
               return(
                 <div>
                 {/* {now to provide properties like onBlur onChange value and name we destructure field here} */}
@@ -170,7 +171,7 @@ const FormikFormComponent = () => {
           <FieldArray name='phNumbers'>
             {
               fieldArrayProps => {
-                {/* console.log(fieldArrayProps) */}
+                /* console.log(fieldArrayProps) */
                 const {push, remove, form} = fieldArrayProps;
                 const {values} = form;
                 const {phNumbers} = values
