@@ -48,7 +48,7 @@ const FormikContainer = () => {
             label="Address"
             name="address"
             />
-            <FormikContainer
+            <FormikControl
             control="select"
             label="Select an option"
             name="selectOption"
